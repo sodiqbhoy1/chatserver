@@ -42,11 +42,14 @@ exports.uploadFile = async (req, res) => {
       fileSize: req.file.size,
     });
 
-    await newMessage.save();
+    const savedMessage = await newMessage.save();
+
+    // Emit the new message to the room
+    req.io.to(roomId).emit("receive_message", savedMessage);
     
     res.status(201).json({
       message: "File uploaded successfully",
-      data: newMessage
+      data: savedMessage
     });
   } catch (err) {
     console.error("Error uploading file:", err);

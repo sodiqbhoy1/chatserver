@@ -27,15 +27,18 @@ module.exports = (io) => {
         }
 
         const newMessage = new Message(messageData);
-        await newMessage.save();
-        
+        const savedMessage = await newMessage.save();
+        console.log("Message saved to DB:", savedMessage);
+
+        const broadcastData = savedMessage.toObject();
+
         console.log(
-          "Sending message back to room:",
-          data.roomId,
+          "Broadcasting 'receive_message' to room:",
+          broadcastData.roomId,
           "with data:",
-          data
+          broadcastData
         );
-        io.to(data.roomId).emit("receive_message", data);
+        io.to(broadcastData.roomId).emit("receive_message", broadcastData);
       } catch (error) {
         console.error("Error saving message:", error);
       }
