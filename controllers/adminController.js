@@ -143,7 +143,7 @@ const adminForgotPassword = async (req, res) => {
             }
         });
         
-        const resetUrl = `${process.env.FRONTEND_URL}/admin/reset-password/${token}`;
+        const resetUrl = `${process.env.CORS_ALLOWED_ORIGINS}/admin/reset-password/${token}`;
         
         // Styled HTML email template
         const emailTemplate = `
