@@ -88,13 +88,7 @@ const adminSignin = async (req, res) => {
         });
 
     } catch (error) {
-        // Log the full error details for debugging
-        console.error('Error during signin:', {
-            message: error.message,
-            stack: error.stack,
-            name: error.name,
-            code: error.code
-        });
+        
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
