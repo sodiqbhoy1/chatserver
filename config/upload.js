@@ -14,27 +14,18 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'chat-app', // Optional: organize files in a folder
-    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'doc', 'docx', 'txt'],
-    resource_type: 'auto', // Automatically detect file type
+    // Images only
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+    resource_type: 'image',
   },
 });
 
-// File filter for additional validation
+// File filter: allow only images
 const fileFilter = (req, file, cb) => {
-  // Allow images
-  if (file.mimetype.startsWith('image/')) {
-    cb(null, true);
+  if (file.mimetype && file.mimetype.startsWith('image/')) {
+    return cb(null, true);
   }
-  // Allow documents
-  else if (file.mimetype === 'application/pdf' || 
-           file.mimetype === 'application/msword' ||
-           file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-           file.mimetype === 'text/plain') {
-    cb(null, true);
-  }
-  else {
-    cb(new Error('Only images and documents are allowed!'), false);
-  }
+  return cb(new Error('Only image uploads are allowed!'), false);
 };
 
 const upload = multer({ 
