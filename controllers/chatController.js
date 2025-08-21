@@ -1,4 +1,5 @@
 const ChatRoom = require("../models/ChatRoom");
+const Message = require("../models/Messages"); // Import the Message model
 
 exports.createRoom = async (req, res) => {
   try {
@@ -20,9 +21,17 @@ exports.createRoom = async (req, res) => {
 
 exports.deleteRoom = async (req, res) => {
   try {
-    await ChatRoom.deleteOne({ roomId: req.params.roomId });
-    res.status(200).json({ message: "Room deleted" });
+    const { roomId } = req.params;
+
+    // First, delete all messages associated with the room
+    await Message.deleteMany({ roomId });
+
+    // Then, delete the room itself
+    await ChatRoom.deleteOne({ roomId });
+
+    res.status(200).json({ message: "Room and all associated messages deleted" });
   } catch (err) {
+    console.error("Error deleting room:", err);
     res.status(500).json({ error: "Error deleting room" });
   }
 };

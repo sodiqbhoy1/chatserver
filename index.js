@@ -6,6 +6,7 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const chatRoutes = require("./routes/chatRoutes");
+const userRoutes = require("./routes/userRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const socketHandler = require("./socket/socketHandler");
 
@@ -28,6 +29,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/', adminRoutes);
 app.use("/", chatRoutes);
+app.use("/", userRoutes);
 
 
 socketHandler(io);
